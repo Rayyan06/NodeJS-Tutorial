@@ -1,37 +1,16 @@
-const { readFile, writeFile } = require("fs").promises;
-// const util = require("util");
-// const readFilePromise = util.promisify(readFile);
-// const writeFilePromise = util.promisify(writeFile);
+const http = require('http');
+const fs = require('fs');
 
-const start = async () => {
-  try {
-    const first = await readFile("./content/first.txt", "utf8");
-    const second = await readFile("./content/first.txt", "utf8");
-    await writeFile(
-      "./content/result-mind-grenade.txt",
-      `THIS IS AWESOME: ${first} ${second}`,
-      { flag: "a" }
-    );
-    console.log(first, second);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-start();
-
-// getText("./content/first.txt")
-//   .then((result) => console.log(result))
-//   .catch((err) => console.log(err))
-
-// const getText = (path) => {
-//   return new Promise((resolve, reject) => {
-//     readFile(path, "utf-8", (err, data) => {
-//       if (err) {
-//         reject(err);
-//       } else {
-//         resolve(data);
-//       }
-//     });
-//   });
-// };
+http
+  .createServer((req, res) => {
+    // const text = fs.readFileSync('./content/big.txt', 'utf8');
+    // res.end(text);
+    const fileStream = fs.createReadStream('./content/big.txt', 'utf8');
+    fileStream.on('open', () => {
+      fileStream.pipe(res);
+    });
+    fileStream.on('error', (err) => {
+      console.log(err);
+    });
+  })
+  .listen(5000);
