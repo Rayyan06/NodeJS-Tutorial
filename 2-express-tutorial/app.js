@@ -1,31 +1,20 @@
 const express = require('express');
+const path = require('path');
+
 const app = express();
 
-// Home Page
-app.get('/', (req, res) => {
-  res.status(200).send('Home Page');
-  console.log('user hit the home page');
-});
+app.use(express.static('./public'));
 
-// About Page
-app.get('/about', (req, res) => {
-  res.status(200).send('About Page');
-});
+// app.get('/', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, './navbar-app/index.html'));
+//   adding to static assets
+//   SSR
+// });
 
-// Error Page
 app.all('*', (req, res) => {
-  res.status(404).send('<h1>resource not found</h1>');
+  res.status(404).send('resource not found');
 });
 
 app.listen(5000, () => {
-  console.log('The server is listening on port 5000');
+  console.log('server is listening on port 5000...');
 });
-
-// Represents HTTP Methods
-// app.get
-// app.post
-// app.put
-// app.delete
-// app.all
-// app.use
-// app.listen
